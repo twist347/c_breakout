@@ -129,11 +129,11 @@ void ball_register_events(es_event_bus_t *bus, ball_t *ball) {
     assert(bus);
     assert(ball);
 
-    es_subscribe(bus, EV_BALL_LAUNCHED, handle_ball_event, ball);
-    es_subscribe(bus, EV_BALL_HIT_WALL, handle_ball_event, ball);
-    es_subscribe(bus, EV_BALL_HIT_PADDLE, handle_ball_event, ball);
-    es_subscribe(bus, EV_BALL_HIT_BRICK, handle_ball_event, ball);
-    es_subscribe(bus, EV_BALL_RESET, handle_ball_event, ball);
+    assert(es_subscribe(bus, EV_BALL_LAUNCHED, handle_ball_event, ball));
+    assert(es_subscribe(bus, EV_BALL_HIT_WALL, handle_ball_event, ball));
+    assert(es_subscribe(bus, EV_BALL_HIT_PADDLE, handle_ball_event, ball));
+    assert(es_subscribe(bus, EV_BALL_HIT_BRICK, handle_ball_event, ball));
+    assert(es_subscribe(bus, EV_BALL_RESET, handle_ball_event, ball));
 }
 
 static void handle_ball_event(const es_event_t *event, es_event_bus_t *bus, void *ctx) {

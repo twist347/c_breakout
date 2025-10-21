@@ -3,7 +3,7 @@
 #include <assert.h>
 
 #include "hud.h"
-#include "maps.h"
+#include "map.h"
 #include "menu.h"
 
 static void game_register_events(es_event_bus_t *bus, game_t *game);
@@ -177,9 +177,9 @@ static void game_register_events(es_event_bus_t *bus, game_t *game) {
     assert(bus);
     assert(game);
 
-    es_subscribe(bus, EV_GAME_START, handle_game_event, game);
-    es_subscribe(bus, EV_KEY_PRESSED, handle_key_pressed, game);
-    es_subscribe(bus, EV_KEY_DOWN, handle_key_down, game);
+    assert(es_subscribe(bus, EV_GAME_START, handle_game_event, game));
+    assert(es_subscribe(bus, EV_KEY_PRESSED, handle_key_pressed, game));
+    assert(es_subscribe(bus, EV_KEY_DOWN, handle_key_down, game));
 }
 
 static void register_subscribers(game_t *game) {
@@ -287,7 +287,7 @@ static void game_load_map(game_t *game, size_t map_idx) {
 
     game->state.n_bricks_alive = 0;
 
-    const char (*map)[BRICKS_COLS] = maps[map_idx];
+    const char (*map)[BRICKS_COLS] = get_map(map_idx);
 
     for (size_t i = 0; i < BRICKS_ROWS; ++i) {
         for (size_t j = 0; j < BRICKS_COLS; ++j) {

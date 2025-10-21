@@ -35,10 +35,10 @@ void paddle_register_events(es_event_bus_t *bus, paddle_t *paddle) {
     assert(bus);
     assert(paddle);
 
-    es_subscribe(bus, EV_PADDLE_MOVE_NONE, handle_paddle_event, paddle);
-    es_subscribe(bus, EV_PADDLE_MOVE_LEFT, handle_paddle_event, paddle);
-    es_subscribe(bus, EV_PADDLE_MOVE_RIGHT, handle_paddle_event, paddle);
-    es_subscribe(bus, EV_PADDLE_RESET, handle_paddle_event, paddle);
+    assert(es_subscribe(bus, EV_PADDLE_MOVE_NONE, handle_paddle_event, paddle));
+    assert(es_subscribe(bus, EV_PADDLE_MOVE_LEFT, handle_paddle_event, paddle));
+    assert(es_subscribe(bus, EV_PADDLE_MOVE_RIGHT, handle_paddle_event, paddle));
+    assert(es_subscribe(bus, EV_PADDLE_RESET, handle_paddle_event, paddle));
 }
 
 static void handle_paddle_event(const es_event_t *event, es_event_bus_t *bus, void *ctx) {

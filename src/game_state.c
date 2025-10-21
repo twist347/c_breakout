@@ -17,13 +17,13 @@ void game_state_register_events(es_event_bus_t *bus, game_state_t *game_state) {
     assert(bus);
     assert(game_state);
 
-    es_subscribe(bus, EV_GAME_PAUSE, handle_game_state_event, game_state);
-    es_subscribe(bus, EV_GAME_RESUME, handle_game_state_event, game_state);
-    es_subscribe(bus, EV_GAME_WIN, handle_game_state_event, game_state);
-    es_subscribe(bus, EV_GAME_OVER, handle_game_state_event, game_state);
-    es_subscribe(bus, EV_GAME_LIFE_LOST, handle_game_state_event, game_state);
-    es_subscribe(bus, EV_GAME_DECREASE_BRICKS_COUNT, handle_game_state_event, game_state);
-    es_subscribe(bus, EV_GAME_INCREASE_SCORE, handle_game_state_event, game_state);
+    assert(es_subscribe(bus, EV_GAME_PAUSE, handle_game_state_event, game_state));
+    assert(es_subscribe(bus, EV_GAME_RESUME, handle_game_state_event, game_state));
+    assert(es_subscribe(bus, EV_GAME_WIN, handle_game_state_event, game_state));
+    assert(es_subscribe(bus, EV_GAME_OVER, handle_game_state_event, game_state));
+    assert(es_subscribe(bus, EV_GAME_LIFE_LOST, handle_game_state_event, game_state));
+    assert(es_subscribe(bus, EV_GAME_DECREASE_BRICKS_COUNT, handle_game_state_event, game_state));
+    assert(es_subscribe(bus, EV_GAME_INCREASE_SCORE, handle_game_state_event, game_state));
 }
 
 static void handle_game_state_event(const es_event_t *event, es_event_bus_t *bus, void *ctx) {

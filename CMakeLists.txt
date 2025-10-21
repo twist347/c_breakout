@@ -24,6 +24,7 @@ add_executable(
         src/texture.c
         src/paddle.c
         src/game.c
+        src/map.c
 )
 
 target_include_directories(${T} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)

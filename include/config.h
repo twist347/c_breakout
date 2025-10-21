@@ -2,12 +2,12 @@
 
 #include "raylib.h"
 
-#define ARR_LEN(arr)    (sizeof((arr)) / sizeof((arr[0])))
+#define ARR_LEN(arr)    (sizeof((arr)) / sizeof((arr)[0]))
 
 // screen config
 #define SCREEN_WIDTH     1920
 #define SCREEN_HEIGHT    1080
-#define SCREEN_TITLE     "02_arkanoid"
+#define SCREEN_TITLE     "c_breakout"
 #define TARGET_FPS       60
 #define BG_COLOR         BLACK
 
@@ -63,10 +63,11 @@
 // map config
 #define MAP_INIT_IDX    0
 
-// audio config
+// sfx config
 #define ASSET_SFX_BOUNCE_PATH      "/sound/bounce.wav"
 #define ASSET_SFX_WALL_HIT_PATH    "/sound/hit.wav"
 
+// music config
 #define ASSET_MUSIC_BG_PATH        "/music/bg_music.ogg"
 
 // textures config

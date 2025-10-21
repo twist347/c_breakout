@@ -41,41 +41,65 @@ void brick_render_grid(const brick_t *bricks) {
 int brick_type_to_score(brick_type_e type) {
     assert(type < BRICK_TYPE__COUNT);
 
+    /*
     static const int brick_score[] = {
         [BRICK_TYPE_LIGHT] = BRICK_LIGHT_SCORE,
         [BRICK_TYPE_MEDIUM] = BRICK_MEDIUM_SCORE,
         [BRICK_TYPE_HEAVY] = BRICK_HEAVY_SCORE
     };
     return brick_score[type];
+    */
+
+    switch (type) {
+        case BRICK_TYPE_LIGHT:
+            return BRICK_LIGHT_SCORE;
+        case BRICK_TYPE_MEDIUM:
+            return BRICK_MEDIUM_SCORE;
+        case BRICK_TYPE_HEAVY:
+            return BRICK_HEAVY_SCORE;
+        default:
+            assert(false);
+            return 0;
+    }
 }
 
 static Color brick_type_to_color(brick_type_e type) {
     assert(type < BRICK_TYPE__COUNT);
 
-    static const Color brick_colors[] = {
-        [BRICK_TYPE_LIGHT] = BRICK_LIGHT_COLOR,
-        [BRICK_TYPE_MEDIUM] = BRICK_MEDIUM_COLOR,
-        [BRICK_TYPE_HEAVY] = BRICK_HEAVY_COLOR,
-    };
-    return brick_colors[type];
+    switch (type) {
+        case BRICK_TYPE_LIGHT:
+            return BRICK_LIGHT_COLOR;
+        case BRICK_TYPE_MEDIUM:
+            return BRICK_MEDIUM_COLOR;
+        case BRICK_TYPE_HEAVY:
+            return BRICK_HEAVY_COLOR;
+        default:
+            assert(false);
+            return WHITE;
+    }
 }
 
 static int brick_type_to_lives(brick_type_e type) {
     assert(type < BRICK_TYPE__COUNT);
 
-    static const int brick_lives[] = {
-        [BRICK_TYPE_LIGHT] = BRICK_LIGHT_LIVES,
-        [BRICK_TYPE_MEDIUM] = BRICK_MEDIUM_LIVES,
-        [BRICK_TYPE_HEAVY] = BRICK_HEAVY_LIVES
-    };
-    return brick_lives[type];
+    switch (type) {
+        case BRICK_TYPE_LIGHT:
+            return BRICK_LIGHT_LIVES;
+        case BRICK_TYPE_MEDIUM:
+            return BRICK_MEDIUM_LIVES;
+        case BRICK_TYPE_HEAVY:
+            return BRICK_HEAVY_LIVES;
+        default:
+            assert(false);
+            return 0;
+    }
 }
 
 void brick_register_events(es_event_bus_t *bus, brick_t *bricks) {
     assert(bus);
     assert(bricks);
 
-    es_subscribe(bus, EV_BRICK_LIFE_LOST, handle_brick_event, bricks);
+    assert(es_subscribe(bus, EV_BRICK_LIFE_LOST, handle_brick_event, bricks));
 }
 
 static void handle_brick_event(const es_event_t *event, es_event_bus_t *bus, void *ctx) {

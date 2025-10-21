@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 #include "raylib.h"
 
 #include "event_system.h"

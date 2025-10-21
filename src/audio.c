@@ -5,7 +5,6 @@
 
 #include "util.h"
 #include "config.h"
-#include "util.h"
 
 static void handle_audio_event(const es_event_t *event, es_event_bus_t *bus, void *ctx);
 
@@ -71,8 +70,8 @@ void audio_register_events(es_event_bus_t *bus, audio_t *audio) {
     assert(bus);
     assert(audio);
 
-    es_subscribe(bus, EV_SFX_PLAY_BOUNCE, handle_audio_event, audio);
-    es_subscribe(bus, EV_SFX_PLAY_WALL_HIT, handle_audio_event, audio);
+    assert(es_subscribe(bus, EV_SFX_PLAY_BOUNCE, handle_audio_event, audio));
+    assert(es_subscribe(bus, EV_SFX_PLAY_WALL_HIT, handle_audio_event, audio));
 }
 
 static void handle_audio_event(const es_event_t *event, es_event_bus_t *bus, void *ctx) {
