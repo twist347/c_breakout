@@ -55,10 +55,9 @@ game_t *game_create(void) {
 void game_destroy(game_t *game) {
     assert(game);
 
-    // TODO: destroy event bus
-
     texture_unload(&game->texture);
     audio_unload(&game->audio);
+    es_bus_destroy(game->bus);
 
     free(game);
 }
