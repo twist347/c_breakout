@@ -5,8 +5,6 @@
 #include <stdbool.h>
 #include <assert.h>
 
-#include "event.h"
-
 #ifdef __cplusplus
 extern "C" {
 
@@ -54,6 +52,39 @@ do {                                                                \
 #ifndef ES_MAX_HANDLERS_PER_TYPE
 #define ES_MAX_HANDLERS_PER_TYPE 32
 #endif
+
+typedef enum {
+    EV_KEY_PRESSED,
+    EV_KEY_DOWN,
+
+    EV_GAME_START,
+
+    EV_GAME_PAUSE,
+    EV_GAME_RESUME,
+    EV_GAME_WIN,
+    EV_GAME_OVER,
+    EV_GAME_LIFE_LOST,
+    EV_GAME_DECREASE_BRICKS_COUNT,
+    EV_GAME_INCREASE_SCORE,
+
+    EV_PADDLE_MOVE_NONE,
+    EV_PADDLE_MOVE_LEFT,
+    EV_PADDLE_MOVE_RIGHT,
+    EV_PADDLE_RESET,
+
+    EV_BALL_LAUNCHED,
+    EV_BALL_HIT_WALL,
+    EV_BALL_HIT_PADDLE,
+    EV_BALL_HIT_BRICK,
+    EV_BALL_RESET,
+
+    EV_BRICK_LIFE_LOST,
+
+    EV_SFX_PLAY_BOUNCE,
+    EV_SFX_PLAY_WALL_HIT,
+
+    EV_TYPE__COUNT
+} es_event_type_e;
 
 typedef struct es_event_t es_event_t;
 typedef struct es_event_bus_t es_event_bus_t;
