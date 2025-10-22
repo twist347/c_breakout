@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ES_VALID_TYPE(t) ((size_t)(t) < (size_t)EV_TYPE__COUNT)
+#define ES_VALID_TYPE(t) ((size_t)(t) < (size_t)ES_EV_TYPE__COUNT)
 
 struct es_event_t {
     es_event_type_e type;
@@ -19,8 +19,8 @@ struct es_event_handler_with_ctx_t {
 typedef struct es_event_handler_with_ctx_t es_event_handler_with_ctx_t;
 
 struct es_event_bus_t {
-    es_event_handler_with_ctx_t handlers[EV_TYPE__COUNT][ES_MAX_HANDLERS_PER_TYPE];
-    size_t num_handlers_by_event[EV_TYPE__COUNT];
+    es_event_handler_with_ctx_t handlers[ES_EV_TYPE__COUNT][ES_MAX_HANDLERS_PER_TYPE];
+    size_t num_handlers_by_event[ES_EV_TYPE__COUNT];
 };
 
 es_event_bus_t *es_bus_create(void) {
@@ -29,7 +29,7 @@ es_event_bus_t *es_bus_create(void) {
         return NULL;
     }
 
-    for (size_t t = 0; t < EV_TYPE__COUNT; ++t) {
+    for (size_t t = 0; t < ES_EV_TYPE__COUNT; ++t) {
         bus->num_handlers_by_event[t] = 0;
         for (size_t i = 0; i < ES_MAX_HANDLERS_PER_TYPE; ++i) {
             bus->handlers[t][i].handler = NULL;

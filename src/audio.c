@@ -70,8 +70,8 @@ void audio_register_events(es_event_bus_t *bus, audio_t *audio) {
     assert(bus);
     assert(audio);
 
-    assert(es_subscribe(bus, EV_SFX_PLAY_BOUNCE, handle_audio_event, audio));
-    assert(es_subscribe(bus, EV_SFX_PLAY_WALL_HIT, handle_audio_event, audio));
+    assert(es_subscribe(bus, ES_EV_SFX_PLAY_BOUNCE, handle_audio_event, audio));
+    assert(es_subscribe(bus, ES_EV_SFX_PLAY_WALL_HIT, handle_audio_event, audio));
 }
 
 static void handle_audio_event(const es_event_t *event, es_event_bus_t *bus, void *ctx) {
@@ -83,10 +83,10 @@ static void handle_audio_event(const es_event_t *event, es_event_bus_t *bus, voi
     const audio_t *audio = ctx;
 
     switch (es_get_event_type(event)) {
-        case EV_SFX_PLAY_BOUNCE:
+        case ES_EV_SFX_PLAY_BOUNCE:
             audio_play_sfx(audio, ASSET_SFX_BALL_BOUNCE);
             break;
-        case EV_SFX_PLAY_WALL_HIT:
+        case ES_EV_SFX_PLAY_WALL_HIT:
             audio_play_sfx(audio, ASSET_SFX_BALL_HIT);
             break;
         default:

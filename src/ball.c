@@ -129,11 +129,11 @@ void ball_register_events(es_event_bus_t *bus, ball_t *ball) {
     assert(bus);
     assert(ball);
 
-    assert(es_subscribe(bus, EV_BALL_LAUNCHED, handle_ball_event, ball));
-    assert(es_subscribe(bus, EV_BALL_HIT_WALL, handle_ball_event, ball));
-    assert(es_subscribe(bus, EV_BALL_HIT_PADDLE, handle_ball_event, ball));
-    assert(es_subscribe(bus, EV_BALL_HIT_BRICK, handle_ball_event, ball));
-    assert(es_subscribe(bus, EV_BALL_RESET, handle_ball_event, ball));
+    assert(es_subscribe(bus, ES_EV_BALL_LAUNCHED, handle_ball_event, ball));
+    assert(es_subscribe(bus, ES_EV_BALL_HIT_WALL, handle_ball_event, ball));
+    assert(es_subscribe(bus, ES_EV_BALL_HIT_PADDLE, handle_ball_event, ball));
+    assert(es_subscribe(bus, ES_EV_BALL_HIT_BRICK, handle_ball_event, ball));
+    assert(es_subscribe(bus, ES_EV_BALL_RESET, handle_ball_event, ball));
 }
 
 static void handle_ball_event(const es_event_t *event, es_event_bus_t *bus, void *ctx) {
@@ -146,28 +146,28 @@ static void handle_ball_event(const es_event_t *event, es_event_bus_t *bus, void
     ball_t *ball = ES_CTX_PTR(ctx, ball_t);
 
     switch (es_get_event_type(event)) {
-        case EV_BALL_LAUNCHED:
+        case ES_EV_BALL_LAUNCHED:
             ball->launched = true;
             break;
-        case EV_BALL_HIT_WALL: {
+        case ES_EV_BALL_HIT_WALL: {
             ES_EV_EXPECT(event, Vector2);
             const Vector2 normal = ES_EV_VAL(event, Vector2);
             ball_handle_walls_collision(ball, normal);
             break;
         }
-        case EV_BALL_HIT_PADDLE: {
+        case ES_EV_BALL_HIT_PADDLE: {
             ES_EV_EXPECT(event, Rectangle);
             const Rectangle *rect = ES_EV_CPTR(event, Rectangle);
             ball_handle_paddle_collision(ball, rect);
             break;
         }
-        case EV_BALL_HIT_BRICK: {
+        case ES_EV_BALL_HIT_BRICK: {
             ES_EV_EXPECT(event, Rectangle);
             const Rectangle *rect = ES_EV_CPTR(event, Rectangle);
             ball_handle_rect_collision(ball, rect);
             break;
         }
-        case EV_BALL_RESET:
+        case ES_EV_BALL_RESET:
             ball_init(ball, BALL_INIT_POS, BALL_RADIUS, BALL_INIT_VEL, BALL_COLOR);
             break;
         default:

@@ -46,7 +46,7 @@ game_t *game_create(void) {
         TraceLog(LOG_ERROR, "failed to initialize texture");
     }
 
-    es_publish(game->bus, EV_GAME_START);
+    es_publish(game->bus, ES_EV_GAME_START);
     game_screen_change(&game->state.screen, GAME_SCREEN_MENU);
 
     return game;
@@ -66,12 +66,12 @@ void game_input(game_t *game) {
     assert(game);
 
     for (int key = GetKeyPressed(); key != 0; key = GetKeyPressed()) {
-        ES_PUBLISH_LDATA(game->bus, EV_KEY_PRESSED, key);
+        ES_PUBLISH_LDATA(game->bus, ES_EV_KEY_PRESSED, key);
     }
 
     if (game->state.screen == GAME_SCREEN_PLAYING) {
         const int move = IsKeyDown(KEY_RIGHT) - IsKeyDown(KEY_LEFT);
-        ES_PUBLISH_LDATA(game->bus, EV_KEY_DOWN, move);
+        ES_PUBLISH_LDATA(game->bus, ES_EV_KEY_DOWN, move);
     }
 }
 
@@ -96,36 +96,36 @@ void game_update(game_t *game, float dt) {
             }
 
             if (ball_check_bottom_collision(ball, screen_res)) {
-                es_publish(game->bus, EV_GAME_LIFE_LOST);
+                es_publish(game->bus, ES_EV_GAME_LIFE_LOST);
                 break;
             }
 
             if (ball_check_left_wall_collision(ball, screen_res)) {
-                ES_PUBLISH_RDATA(game->bus, EV_BALL_HIT_WALL, Vector2, ((Vector2){1.f, 0.f}));
-                es_publish(game->bus, EV_SFX_PLAY_WALL_HIT);
+                ES_PUBLISH_RDATA(game->bus, ES_EV_BALL_HIT_WALL, Vector2, ((Vector2){1.f, 0.f}));
+                es_publish(game->bus, ES_EV_SFX_PLAY_WALL_HIT);
             } else if (ball_check_right_wall_collision(ball, screen_res)) {
-                ES_PUBLISH_RDATA(game->bus, EV_BALL_HIT_WALL, Vector2, ((Vector2){-1.f, 0.f}));
-                es_publish(game->bus, EV_SFX_PLAY_WALL_HIT);
+                ES_PUBLISH_RDATA(game->bus, ES_EV_BALL_HIT_WALL, Vector2, ((Vector2){-1.f, 0.f}));
+                es_publish(game->bus, ES_EV_SFX_PLAY_WALL_HIT);
             } else if (ball_check_top_wall_collision(ball, screen_res)) {
-                ES_PUBLISH_RDATA(game->bus, EV_BALL_HIT_WALL, Vector2, ((Vector2){0.f, 1.f}));
-                es_publish(game->bus, EV_SFX_PLAY_WALL_HIT);
+                ES_PUBLISH_RDATA(game->bus, ES_EV_BALL_HIT_WALL, Vector2, ((Vector2){0.f, 1.f}));
+                es_publish(game->bus, ES_EV_SFX_PLAY_WALL_HIT);
             }
 
             if (ball_check_paddle_collision(ball, &paddle->rect)) {
-                ES_PUBLISH_LDATA(game->bus, EV_BALL_HIT_PADDLE, paddle->rect);
-                es_publish(game->bus, EV_SFX_PLAY_BOUNCE);
+                ES_PUBLISH_LDATA(game->bus, ES_EV_BALL_HIT_PADDLE, paddle->rect);
+                es_publish(game->bus, ES_EV_SFX_PLAY_BOUNCE);
                 break;
             }
             for (size_t i = 0; i < BRICKS_ROWS * BRICKS_COLS; ++i) {
                 const brick_t *brick = &game->bricks[i];
                 if (brick->active && ball_check_rect_collision(ball, &brick->rect)) {
-                    es_publish(game->bus, EV_SFX_PLAY_WALL_HIT);
-                    ES_PUBLISH_LDATA(game->bus, EV_BALL_HIT_BRICK, brick->rect);
-                    ES_PUBLISH_LDATA(game->bus, EV_BRICK_LIFE_LOST, i);
+                    es_publish(game->bus, ES_EV_SFX_PLAY_WALL_HIT);
+                    ES_PUBLISH_LDATA(game->bus, ES_EV_BALL_HIT_BRICK, brick->rect);
+                    ES_PUBLISH_LDATA(game->bus, ES_EV_BRICK_LIFE_LOST, i);
                     if (brick->lives == 0) {
-                        es_publish(game->bus, EV_GAME_DECREASE_BRICKS_COUNT);
+                        es_publish(game->bus, ES_EV_GAME_DECREASE_BRICKS_COUNT);
                         const int score = brick_type_to_score(brick->type);
-                        ES_PUBLISH_LDATA(game->bus, EV_GAME_INCREASE_SCORE, score);
+                        ES_PUBLISH_LDATA(game->bus, ES_EV_GAME_INCREASE_SCORE, score);
                     }
 
                     break;
@@ -176,9 +176,9 @@ static void game_register_events(es_event_bus_t *bus, game_t *game) {
     assert(bus);
     assert(game);
 
-    assert(es_subscribe(bus, EV_GAME_START, handle_game_event, game));
-    assert(es_subscribe(bus, EV_KEY_PRESSED, handle_key_pressed, game));
-    assert(es_subscribe(bus, EV_KEY_DOWN, handle_key_down, game));
+    assert(es_subscribe(bus, ES_EV_GAME_START, handle_game_event, game));
+    assert(es_subscribe(bus, ES_EV_KEY_PRESSED, handle_key_pressed, game));
+    assert(es_subscribe(bus, ES_EV_KEY_DOWN, handle_key_down, game));
 }
 
 static void register_subscribers(game_t *game) {
@@ -205,26 +205,26 @@ static void handle_key_pressed(const es_event_t *event, es_event_bus_t *bus, voi
     switch (game->state.screen) {
         case GAME_SCREEN_MENU:
             if (key == KEY_ENTER) {
-                es_publish(bus, EV_GAME_START);
+                es_publish(bus, ES_EV_GAME_START);
             }
             break;
         case GAME_SCREEN_PLAYING:
             if (key == KEY_P) {
-                es_publish(bus, EV_GAME_PAUSE);
+                es_publish(bus, ES_EV_GAME_PAUSE);
             }
             if (key == KEY_SPACE && !game->ball.launched) {
-                es_publish(bus, EV_BALL_LAUNCHED);
+                es_publish(bus, ES_EV_BALL_LAUNCHED);
             }
             break;
         case GAME_SCREEN_PAUSE:
             if (key == KEY_P) {
-                es_publish(bus, EV_GAME_RESUME);
+                es_publish(bus, ES_EV_GAME_RESUME);
             }
             break;
         case GAME_SCREEN_WIN:
         case GAME_SCREEN_LOSE:
             if (key == KEY_ENTER) {
-                es_publish(bus, EV_GAME_START);
+                es_publish(bus, ES_EV_GAME_START);
             }
             break;
         default:
@@ -244,13 +244,13 @@ static void handle_key_down(const es_event_t *event, es_event_bus_t *bus, void *
         const int move = ES_EV_VAL(event, int);
         switch (move) {
             case 0:
-                es_publish(bus, EV_PADDLE_MOVE_NONE);
+                es_publish(bus, ES_EV_PADDLE_MOVE_NONE);
                 break;
             case 1:
-                es_publish(bus, EV_PADDLE_MOVE_RIGHT);
+                es_publish(bus, ES_EV_PADDLE_MOVE_RIGHT);
                 break;
             case -1:
-                es_publish(bus, EV_PADDLE_MOVE_LEFT);
+                es_publish(bus, ES_EV_PADDLE_MOVE_LEFT);
                 break;
             default:
                 break;
@@ -266,7 +266,7 @@ static void handle_game_event(const es_event_t *event, es_event_bus_t *bus, void
     game_t *game = ES_CTX_PTR(ctx, game_t);
 
     switch (es_get_event_type(event)) {
-        case EV_GAME_START:
+        case ES_EV_GAME_START:
             game->map_idx = MAP_INIT_IDX;
 
             paddle_init(&game->paddle, PADDLE_INIT_RECT, PADDLE_INIT_VEL, PADDLE_COLOR);

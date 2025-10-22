@@ -99,7 +99,7 @@ void brick_register_events(es_event_bus_t *bus, brick_t *bricks) {
     assert(bus);
     assert(bricks);
 
-    assert(es_subscribe(bus, EV_BRICK_LIFE_LOST, handle_brick_event, bricks));
+    assert(es_subscribe(bus, ES_EV_BRICK_LIFE_LOST, handle_brick_event, bricks));
 }
 
 static void handle_brick_event(const es_event_t *event, es_event_bus_t *bus, void *ctx) {
@@ -112,7 +112,7 @@ static void handle_brick_event(const es_event_t *event, es_event_bus_t *bus, voi
     brick_t *bricks = ES_CTX_PTR(ctx, brick_t);
 
     switch (es_get_event_type(event)) {
-        case EV_BRICK_LIFE_LOST: {
+        case ES_EV_BRICK_LIFE_LOST: {
             ES_EV_EXPECT(event, size_t);
             const size_t brick_idx = ES_EV_VAL(event, size_t);
             brick_t *brick = &bricks[brick_idx];

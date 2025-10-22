@@ -35,10 +35,10 @@ void paddle_register_events(es_event_bus_t *bus, paddle_t *paddle) {
     assert(bus);
     assert(paddle);
 
-    assert(es_subscribe(bus, EV_PADDLE_MOVE_NONE, handle_paddle_event, paddle));
-    assert(es_subscribe(bus, EV_PADDLE_MOVE_LEFT, handle_paddle_event, paddle));
-    assert(es_subscribe(bus, EV_PADDLE_MOVE_RIGHT, handle_paddle_event, paddle));
-    assert(es_subscribe(bus, EV_PADDLE_RESET, handle_paddle_event, paddle));
+    assert(es_subscribe(bus, ES_EV_PADDLE_MOVE_NONE, handle_paddle_event, paddle));
+    assert(es_subscribe(bus, ES_EV_PADDLE_MOVE_LEFT, handle_paddle_event, paddle));
+    assert(es_subscribe(bus, ES_EV_PADDLE_MOVE_RIGHT, handle_paddle_event, paddle));
+    assert(es_subscribe(bus, ES_EV_PADDLE_RESET, handle_paddle_event, paddle));
 }
 
 static void handle_paddle_event(const es_event_t *event, es_event_bus_t *bus, void *ctx) {
@@ -51,16 +51,16 @@ static void handle_paddle_event(const es_event_t *event, es_event_bus_t *bus, vo
     paddle_t *paddle = ES_CTX_PTR(ctx, paddle_t);
 
     switch (es_get_event_type(event)) {
-        case EV_PADDLE_MOVE_NONE:
+        case ES_EV_PADDLE_MOVE_NONE:
             paddle->axis = 0;
             break;
-        case EV_PADDLE_MOVE_LEFT:
+        case ES_EV_PADDLE_MOVE_LEFT:
             paddle->axis = -1;
             break;
-        case EV_PADDLE_MOVE_RIGHT:
+        case ES_EV_PADDLE_MOVE_RIGHT:
             paddle->axis = 1;
             break;
-        case EV_PADDLE_RESET:
+        case ES_EV_PADDLE_RESET:
             paddle_init(paddle, PADDLE_INIT_RECT, PADDLE_INIT_VEL, PADDLE_COLOR);
             break;
         default:
